@@ -1,0 +1,75 @@
+.wrappForm{
+    padding: 60px;
+    display: inline-block;
+}
+
+.paper{
+    text-align: center;
+}
+
+.wBtn .btnText{
+    font-size: 14px;
+}
+.wBtn svg{
+    width: 20px;
+    margin-left: 7px;
+}
+
+ul.w_tasks{
+    padding: 30px;
+    margin: 0px;
+}
+ul.w_tasks li{
+    display: block;
+    margin-bottom: 10px;
+    position: relative;
+    overflow: hidden;
+    padding-bottom: 10px;
+}
+
+ul.w_tasks li:before{
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 1px;
+    background-color: #303f9f;
+    bottom: 0px;
+    left: -100%;
+    transition: .4s;
+}
+
+ul.w_tasks li:hover:before{
+    content: '';
+    left: 0px;
+    transition: .4s;
+}
+
+ul.w_tasks li a{
+    display: inline-block;
+    text-decoration: none;
+    color: #333;
+    transition: .4s;
+    position: relative;
+}
+ul.w_tasks li a:hover{
+    color: #303f9f;
+    transition: .4s;
+}
+
+/*ul.w_tasks li a:before{*/
+/*    content: '';*/
+/*    position: absolute;*/
+/*    width: 100%;*/
+/*    height: 1px;*/
+/*    background-color: #303f9f;*/
+/*    bottom: 0px;*/
+/*    left: -100%;*/
+/*    transition: .4s;*/
+/*}*/
+
+/*ul.w_tasks li:hover a:before{*/
+/*    content: '';*/
+/*    left: 0px;*/
+/*    transition: .4s;*/
+
+/*}*/

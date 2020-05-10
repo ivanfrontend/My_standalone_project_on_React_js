@@ -1,0 +1,19 @@
+.checked {
+    display: inline-block;
+}
+.checked button{
+    background: transparent;
+    border: 0px;
+    margin: 0px 5px 0px 0px;
+    padding: 0px;
+    cursor: pointer;
+    transition: .4s;
+}
+
+.checked button svg{
+    width: 23px;
+    height: auto;
+    position: relative;
+    top: 4px;
+    transition: .4s;
+}

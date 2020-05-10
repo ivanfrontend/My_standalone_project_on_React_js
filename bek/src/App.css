@@ -1,0 +1,70 @@
+*{
+  font-size: 20px;
+}
+
+.App {
+  display: grid;
+  width: 1200px;
+  margin: 0 auto;
+
+  grid-template-areas:
+    "header header header"
+    "nav content content";
+  grid-template-rows: 60px 1fr;
+  grid-template-columns: 2fr 10fr;
+  grid-gap: 10px;
+
+}
+
+.app_content{
+  padding: 10px;
+  grid-area: content;
+  background: blue;
+}
+
+.content img{
+  width: 100%;
+}
+
+.preloader{
+  position: fixed;
+  width: 100%;
+  height: 100vh;
+  background-color: #5e9dff;
+  z-index: 10;
+  top: 0px;
+  left: 0px;
+}
+
+
+
+.preloader img{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+}
+
+/*Общие стили*/
+.edit_icons{
+  margin: 0px 5px;
+  cursor: pointer;
+  transition: .4s;
+}
+
+.edit_icons svg{
+  height: auto;
+  width: 20px;
+  position: relative;
+  top: 2px;
+  transition: .4s;
+}
+
+.edit_icons:hover svg{
+  color: #303f9f;
+  transition: .4s;
+}
+
+
+
+/*Конец Общие стили*/
