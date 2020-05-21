@@ -9,6 +9,7 @@ import TasksContainer from "./Components/Tasks/TasksContainer";
 import TaskItemsContainer from "./Components/Task/TaskItemsContainer";
 import AuthContainer from "./Components/Authentication/AuthContainer";
 import Preloader from "./Components/common/preloader/preloader";
+import HeaderContainer from "./Components/Header/HeaderContainer";
 
 class App extends React.Component {
   componentDidMount() {
@@ -20,6 +21,7 @@ class App extends React.Component {
       }
     return (
       <div>
+        <HeaderContainer />
         <Route path='/auth' render={ () => <AuthContainer /> } />
         <Route path='/' render={() => this.props.location.pathname === '/' &&  <Redirect to='/tasks' />  } />
         <Route path='/tasks' render={() => <TasksContainer />} />

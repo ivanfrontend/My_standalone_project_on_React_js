@@ -1,7 +1,6 @@
 import {authAPI, registrAPI} from "../api/api";
 const REGISTER_PROGRES = 'REGISTER_PROGRES'
 const REGISTRATION_COMPLETED = 'REGISTRATION_COMPLETED'
-const IS_AUTH = 'IS_AUTH'
 const SET_USER_DATA = 'SET_USER_DATA'
 let initialState = {
     registerProgres: false,
@@ -12,7 +11,6 @@ let initialState = {
         name: null,
         isAuth: false
     }
-
 };
 
 const authReducer = (state = initialState, action) => {
@@ -64,11 +62,20 @@ export const getUserData = () => (dispatch) => {
 export const login = (email, password) => (dispatch) => {
     dispatch(registerProgres(true))
     authAPI.auth(email, password).then( data => {
-        debugger
         if(data.resultCode === 0){
             dispatch(getUserData())
         }
 
+    } )
+}
+
+export const logaut = () => (dispatch) => {
+    authAPI.logaut().then( data => {
+        if(data.resultCode === 0){
+            dispatch(setUserData(null, null, null, false))
+            dispatch(registerProgres(false))
+            dispatch(registrationСompleted(false))
+        }
     } )
 }
 

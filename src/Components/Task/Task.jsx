@@ -61,7 +61,7 @@ class Task  extends React.Component{
         let {title, body} = taskData
         this.props.taskItem.title = title
         this.props.taskItem.body = body
-        this.props.taskUpdate(this.props.taskItem, this.props.taskItem.stateTask)
+        this.props.updateTask(this.props.taskItem, this.props.taskItem.stateTask)
         this.setState({
             editModTitile: false,
             editModDesc: false
@@ -71,12 +71,17 @@ class Task  extends React.Component{
 
 
     render() {
-
         return (
             <>
                 <div>
-                    <RemoveTask {...this.props} taskId={this.props.taskItem._id} />
-                    <StateCheckedTask {...this.props} task={this.props.taskItem} />
+                    <RemoveTask
+                        taskInProgress={this.props.taskInProgress}
+                        deleteTaskOne={this.props.deleteTaskOne}
+                        taskId={this.props.taskItem._id} />
+                    <StateCheckedTask
+                        taskInProgress={this.props.taskInProgress}
+                        updateTask={this.props.updateTask}
+                        task={this.props.taskItem} />
                 </div>
                 <ul>
                     {this.state.editModTitile

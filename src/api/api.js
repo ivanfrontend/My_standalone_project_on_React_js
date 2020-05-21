@@ -11,8 +11,8 @@ const instance = axios.create({
 
 
 export const tasksAPI = {
-    getTasks() {
-        return instance.get(`api/task`).then(response => response.data)
+    getTasks(completedTask, notDoneTask) {
+        return instance.get(`api/task?completedTask=${completedTask}&notDoneTask=${notDoneTask}`).then(response => response.data)
     },
     addTask(title, body) {
          return instance.post(`api/task`, {title, body}).then(response => response.data)
@@ -39,6 +39,9 @@ export const authAPI = {
     },
     auth(email, password) {
          return instance.post(`api/auth`, {email, password}).then(response => response.data)
+    },
+    logaut() {
+        return instance.delete('api/auth').then(response => response.data)
     }
 
 }

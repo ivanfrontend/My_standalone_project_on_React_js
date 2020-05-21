@@ -2,23 +2,21 @@ import React from 'react';
 import {compose} from "redux";
 import {connect} from "react-redux";
 import { withRouter, Redirect } from 'react-router-dom';
-import {getTask, taskUpdate, deleteTask} from "../../redux/tasks-reducer";
+import {getTask, updateTask, deleteTaskOne} from "../../redux/taskItem-reducer";
 import Task from "./Task";
+import {withAuthRedirect} from "../../hoc/withAuthRedirect";
 
 class TaskItemsContainer extends React.Component {
 
     componentDidMount() {
-
         let taskId = this.props.match.params.taskId
         this.props.getTask(taskId)
-
     }
-
 
     render() {
         return (
             <>
-                {this.props.deleteTaskOk &&  <Redirect to='/tasks' /> }
+                {this.props.emptyTask &&  <Redirect to='/tasks' /> }
                 <Task {...this.props}  />
             </>
         )
@@ -27,13 +25,14 @@ class TaskItemsContainer extends React.Component {
 
 
 let mapStateToProps = (state) => ({
-    taskItem: state.tasksPage.taskItem,
-    deleteTaskInProgress: state.tasksPage.deleteTaskInProgress,
-    deleteTaskOk: state.tasksPage.deleteTaskOk
+    taskItem: state.taskPage.taskItem,
+    taskInProgress: state.tasksPage.taskInProgress,
+    emptyTask: state.taskPage.emptyTask
 })
 
 
 export default compose(
-    connect(mapStateToProps, {getTask, taskUpdate, deleteTask}), // 3
+    connect(mapStateToProps, {getTask, updateTask, deleteTaskOne}), // 3
     withRouter, // 2
+    withAuthRedirect
 )(TaskItemsContainer)

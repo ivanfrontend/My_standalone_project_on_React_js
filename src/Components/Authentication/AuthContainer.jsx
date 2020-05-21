@@ -5,6 +5,7 @@ import {register, registrationСompleted, login} from '../../redux/auth-reducer'
 
 class AuthContainer extends React.Component {
     render() {
+
         return(
             <Auth {...this.props} />
         )

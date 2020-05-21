@@ -1,14 +1,15 @@
 import {tasksAPI} from "../api/api";
+
 const SET_TASKS = 'SET_TASKS'
-const SET_TASK_ITEM = 'SET_TASK_ITEM'
+const PROGRESS_TASK = 'PROGRESS_TASK'
+const CHANGE_TASK = 'CHANGE_TASK'
 const DELETE_TASK = 'DELETE_TASK'
-const DELETE_TASK_OK = 'DELETE_TASK_OK'
+const RESET_ALL_FILTERS = 'RESET_ALL_FILTERS'
 
 let initialState = {
     tasks:  [],
-    taskItem: {},
-    deleteTaskInProgress: [],
-    deleteTaskOk: false
+    taskInProgress: [],
+    resetAllFilrefr: false
 };
 
 const tasksReducer = (state = initialState, action) => {
@@ -16,25 +17,34 @@ const tasksReducer = (state = initialState, action) => {
         case SET_TASKS:
             return{
                 ...state,
-                tasks: action.tasks
+                tasks: [...action.tasks]
             }
-
-        case SET_TASK_ITEM:
+        case CHANGE_TASK:
             return {
                 ...state,
-                taskItem: action.taskItem
+                tasks: state.tasks.map( t => {
+                    if( t._id === action.task._id ){
+                        return {...t, t: action.task}
+                    }
+                    return t
+                })
+            }
+        case PROGRESS_TASK:
+            return {
+                ...state,
+                taskInProgress: action.isFetching
+                ? [...state.taskInProgress, action.taskId]
+                : state.taskInProgress.filter( t => t != action.taskId )
             }
         case DELETE_TASK:
-            return {
+            return{
                 ...state,
-                deleteTaskInProgress: action.isFetching
-                ? [...state.deleteTaskInProgress, action.taskId]
-                : state.deleteTaskInProgress.filter( t => t != action.taskId )
+                tasks: state.tasks.filter( t => t._id != action.taskId)
             }
-        case DELETE_TASK_OK:
+        case RESET_ALL_FILTERS:
             return {
                 ...state,
-                deleteTaskOk: action.isFetching
+                resetAllFilrefr: !state.resetAllFilrefr
             }
 
         default:
@@ -46,49 +56,45 @@ const tasksReducer = (state = initialState, action) => {
 
 
 export const setTasks = (tasks) => ( {type: SET_TASKS, tasks } );
-export const setTaskItems = (taskItem) => ({type: SET_TASK_ITEM, taskItem})
-export const deleteTaskProgress = (isFetching, taskId) => ({type: DELETE_TASK, isFetching, taskId})
-export const deleteTaskOk = (isFetching) => ({type: DELETE_TASK_OK, isFetching})
+export const taskProgress = (isFetching, taskId) => ({type: PROGRESS_TASK, isFetching, taskId})
+export const changeTask = (task) => ({type: CHANGE_TASK, task});
+export const deleteTask = (taskId) => ({type: DELETE_TASK, taskId});
+export const resetFilter = () => ({type: RESET_ALL_FILTERS});
 
-export const getTasks = () => {
+
+export const getTasks = (completedTask = false, notDoneTask = false) => {
     return (dispatch) => {
-        tasksAPI.getTasks().then( data => {
+        tasksAPI.getTasks(completedTask, notDoneTask).then( data => {
             dispatch(setTasks(data))
         })
     }
 }
 export const addTask = (task, body) => (dispatch) => {
     return  tasksAPI.addTask(task, body).then( data => {
-        dispatch(getTasks(data))
-        return data
+        dispatch(getTasks())
+        dispatch(resetFilter())
     })
 }
 
-export const getTask = (taskId) => (dispatch) => {
-    tasksAPI.getItemTask(taskId).then( data => {
-        dispatch(setTaskItems(data))
-    } )
-}
-export const deleteTask = (taskId) => (dispatch) => {
-    dispatch(deleteTaskProgress(true, taskId))
-    return tasksAPI.deleteTask(taskId).then( data => {
-        dispatch(deleteTaskProgress(false, taskId))
-        dispatch(deleteTaskOk(true))
-        dispatch(deleteTaskOk(false))
-        dispatch(getTasks())
-        dispatch(getTask(taskId))
+
+export const deleteTaskOne = (taskId) => (dispatch) => {
+    dispatch(taskProgress(true, taskId))
+    tasksAPI.deleteTask(taskId).then( data => {
+        dispatch(taskProgress(false, taskId))
+        dispatch(deleteTask(taskId))
     } )
 }
 
-export const taskUpdate = (task, stateTask) => (dispatch) => {
-    dispatch(deleteTaskProgress(true, task._id))
+export const updateTask = (task, stateTask) => (dispatch) => {
     task.stateTask = stateTask
+    dispatch(taskProgress(true, task._id))
     tasksAPI.updateTask(task._id,task.title, task.body, task.stateTask ).then( data => {
-        dispatch(deleteTaskProgress(false, task._id))
-        dispatch(getTasks())
-
-    } )
+        dispatch(changeTask(task))
+        dispatch(taskProgress(false, task._id))
+    })
 }
+
+
 
 
 export default tasksReducer;

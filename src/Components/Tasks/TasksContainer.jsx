@@ -2,7 +2,7 @@ import React from 'react';
 import Tasks from "./Tasks";
 import {compose} from "redux";
 import {connect} from "react-redux";
-import { getTasks, addTask, deleteTask, taskUpdate} from "../../redux/tasks-reducer";
+import { getTasks, addTask, deleteTaskOne, updateTask} from "../../redux/tasks-reducer";
 import {reset} from 'redux-form';
 import AddTask from "./TaskForm";
 
@@ -11,6 +11,8 @@ import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import Container from '@material-ui/core/Container';
 import s from './Task.module.css'
+import {withAuthRedirect} from "../../hoc/withAuthRedirect";
+import TopBar from "./TopBar/TopBar";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -37,36 +39,33 @@ class TasksContainer extends React.Component {
 
     render() {
         return (
+            <>
+            {/*{this.props.isFetching &&  <Preloader/>}*/}
             <div className={this.classes.root}>
                 <Container maxWidth="lg">
                 <Grid container spacing={2}>
-                    <Grid item lg={12}>
-                        <Paper className={s.paper}>
-                            <ul>
-                                <li>{ this.props.user.name && this.props.user.name }</li>
-                                <li>{ this.props.user.email && this.props.user.email }</li>
-                                <li></li>
-                            </ul>
-                        </Paper>
-                    </Grid>
+
                     <Grid item lg={4}>
                         <Paper className={s.paper}>
                             <AddTask />
                         </Paper>
                     </Grid>
                     <Grid item lg={8}>
+                        <TopBar resetAllFilrefr={this.props.resetAllFilrefr} getTasks={this.props.getTasks} />
                         <Paper className={this.classes.paper}>
                             <Tasks
-                                deleteTaskInProgress={this.props.deleteTaskInProgress}
+                                taskInProgress={this.props.taskInProgress}
                                 tasks={this.props.tasks}
                                 taskUpdate={this.props.taskUpdate}
-                                deleteTask={this.props.deleteTask}
+                                updateTask={this.props.updateTask}
+                                deleteTaskOne={this.props.deleteTaskOne}
                             />
                         </Paper>
                     </Grid>
                 </Grid>
                 </Container>
             </div>
+                </>
         )
     }
 }
@@ -74,11 +73,14 @@ class TasksContainer extends React.Component {
 
 let mapStateToProps = (state) => ({
     tasks: state.tasksPage.tasks,
-    deleteTaskInProgress: state.tasksPage.deleteTaskInProgress,
-    user: state.auth.user
+    taskInProgress: state.tasksPage.taskInProgress,
+    user: state.auth.user,
+    isFetching: state.tasksPage.isFetching,
+    resetAllFilrefr: state.tasksPage.resetAllFilrefr
 })
 
 
 export default compose(
-    connect(mapStateToProps, {getTasks, addTask, deleteTask, taskUpdate, reset}),
+    connect(mapStateToProps, {getTasks, addTask, deleteTaskOne, updateTask, reset}),
+    withAuthRedirect
 )(TasksContainer)

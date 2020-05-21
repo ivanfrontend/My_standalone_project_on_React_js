@@ -1,5 +1,4 @@
 import React from 'react'
-import {containerComponent} from "../../../../hoc/containerComponent";
 import s from './StateCheckedTask.module.css'
 import CheckBoxIcon from '@material-ui/icons/CheckBox';
 import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
@@ -9,12 +8,12 @@ const StateCheckedTask = (props) => {
         <span className={s.checked}>
             {props.task.stateTask
                 ? <button
-                    disabled={props.deleteTaskInProgress.some( id => id === props.task._id )}
-                    onClick={() => props.taskUpdate(props.task, false)}
+                    disabled={props.taskInProgress.some( id => id === props.task._id )}
+                    onClick={() => props.updateTask(props.task, false)}
                 >  <CheckBoxIcon /> </button>
                 : <button
-                    disabled={props.deleteTaskInProgress.some( id => id === props.task._id )}
-                    onClick={ () => props.taskUpdate(props.task, true) }
+                    disabled={props.taskInProgress.some( id => id === props.task._id )}
+                    onClick={ () => props.updateTask(props.task, true) }
                 > <CheckBoxOutlineBlankIcon />  </button>
 
             }
@@ -22,4 +21,4 @@ const StateCheckedTask = (props) => {
     )
 }
 
-export default containerComponent(StateCheckedTask)
+export default StateCheckedTask

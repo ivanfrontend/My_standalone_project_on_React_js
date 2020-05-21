@@ -33,26 +33,25 @@ const Auth = (props) => {
     let updateTabs = (bool) => {
         setEditMod(bool)
     }
-
+    if(props.isAuth) return <Redirect to='/tasks' />
     return (
         <>
-            {props.isAuth && <Redirect to='/tasks' />}
             <div className={classes.root}>
                 <Container maxWidth="lg">
                     <Grid container spacing={2}>
                         <Grid item lg={12}>
                             <Paper className={s.auth} >
                                 <ul>
-                                    <li> <button disabled={ !elitMod && true }  onClick={ () => updateTabs( false ) } > Регистрация </button> </li>
-                                    <li> <button disabled={ elitMod && true } onClick={ () => updateTabs( true ) } > Авторизация </button> </li>
+                                    <li> <button disabled={ elitMod && true }  onClick={ () => updateTabs( true ) } > Регистрация </button> </li>
+                                    <li> <button disabled={ !elitMod && true } onClick={ () => updateTabs( false ) } > Авторизация </button> </li>
                                 </ul>
-                                {  !elitMod &&
+                                {  elitMod &&
                                     <Registration
                                         registerProgres={props.registerProgres}
                                         registrationСompleted={props.registrationСompleted}
                                         register={props.register} />
                                 }
-                                {  elitMod &&
+                                {  !elitMod &&
                                     // props.isAuth ? <Redirect to='/tasks' /> :
                                    <Login login={props.login} />
                                 }

@@ -8,6 +8,7 @@ import EditIcon from '@material-ui/icons/Edit';
 import s from './Task.module.css'
 import RemoveTask from "../common/Elements/RemoveTask/RemoveTask";
 import StateCheckedTask from "../common/Elements/StateCheckedTask/StateCheckedTask";
+import Preloader from "../common/preloader/preloader";
 
 const TaskForm = (props) => {
     return (
@@ -38,7 +39,6 @@ class Tasks extends React.Component {
         })
     }
 
-
     getInitialValues () {
         return {
             title: this.state.task.title
@@ -48,18 +48,17 @@ class Tasks extends React.Component {
     taskChange = (formData) => {
 
         this.state.task.title = formData.title
-        console.log(formData)
-        console.log(this.state.task)
-        this.props.taskUpdate(this.state.task ,this.state.task.stateTask)
+        this.props.updateTask(this.state.task ,this.state.task.stateTask)
         this.setState({
             task: {}
         })
     }
 
 
-
     render() {
 
+        // {this.props.isFetching &&  <Preloader/>}
+        // if(this.props.isFetching ) return  <Preloader/>
         return (
             <ul className={s.w_tasks}>
                 {
@@ -76,27 +75,15 @@ class Tasks extends React.Component {
                                 </span>
 
                                 <span className={'delete_icons'} >
-                                    {/*<button title={'Удалить'}*/}
-                                    {/*disabled={this.props.deleteTaskInProgress.some( id => id === t._id )}*/}
-                                    {/*onClick={() => {this.props.deleteTask(t._id)}} >*/}
-                                    {/*<DeleteForeverIcon /></button>*/}
-                                    <RemoveTask {...this.props} taskId={t._id} />
+                                    <RemoveTask
+                                        taskInProgress={this.props.taskInProgress}
+                                        deleteTaskOne={this.props.deleteTaskOne}
+                                        taskId={t._id} />
                                 </span>
-
-                                {/*<span className={'check_state'}>*/}
-                                {/*    {t.stateTask*/}
-                                {/*    ? <button*/}
-                                {/*        disabled={this.props.deleteTaskInProgress.some( id => id === t._id )}*/}
-                                {/*        onClick={() => this.props.taskUpdate(t, false)}*/}
-                                {/*    >  <CheckBoxIcon /> </button>*/}
-                                {/*    : <button*/}
-                                {/*        disabled={this.props.deleteTaskInProgress.some( id => id === t._id )}*/}
-                                {/*        onClick={ () => this.props.taskUpdate(t, true) }*/}
-                                {/*    > <CheckBoxOutlineBlankIcon />  </button>*/}
-
-                                {/*}*/}
-                                {/*</span>*/}
-                                <StateCheckedTask {...this.props} task={t} />
+                                <StateCheckedTask
+                                    taskInProgress={this.props.taskInProgress}
+                                    updateTask={this.props.updateTask}
+                                    task={t} />
 
                             </li>
 
